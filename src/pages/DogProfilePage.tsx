@@ -218,7 +218,7 @@ export default function DogProfilePage() {
   )
 }
 
-function ProfileTab({ dog, isEditor, onPrint }: { dog: Dog; isEditor: boolean; onPrint: () => void }) {
+function ProfileTab({ dog, onPrint }: { dog: Dog; isEditor?: boolean; onPrint: () => void }) {
   const fields: { label: string; value: string | undefined | null }[] = [
     { label: 'Nombre', value: dog.name },
     { label: 'Raza', value: dog.breed },
