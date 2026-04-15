@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { MedicalHistory, MedicalEventType } from '../../types'
 import { supabase } from '../../lib/supabase'
 import { formatDate } from '../../utils/dateUtils'
+import { isGoogleDriveLink, getDriveLinkLabel } from '../../utils/csvUtils'
 import { Badge } from '../ui/Badge'
 import { Button } from '../ui/Button'
 import { ConfirmDialog } from '../ui/Modal'
@@ -87,6 +88,25 @@ export function MedicalHistoryList({ dogId, records, isEditor, onRefresh }: Prop
                             {r.veterinarian && r.clinic && ' · '}
                             {r.clinic}
                           </p>
+                        )}
+                        {r.attachments_urls && r.attachments_urls.length > 0 && (
+                          <div className="mt-2 flex flex-wrap gap-1.5">
+                            {r.attachments_urls.map((url, i) => (
+                              <a
+                                key={i}
+                                href={url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs bg-blue-50 text-blue-600 hover:bg-blue-100 transition border border-blue-100"
+                                title={url}
+                              >
+                                <span>{isGoogleDriveLink(url) ? '📂' : '🔗'}</span>
+                                <span className="max-w-[140px] truncate">
+                                  {isGoogleDriveLink(url) ? getDriveLinkLabel(url) : 'Ver documento'}
+                                </span>
+                              </a>
+                            ))}
+                          </div>
                         )}
                       </div>
                       {isEditor && (

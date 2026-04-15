@@ -13,6 +13,7 @@ import { MedicationList } from '../components/medications/MedicationList'
 import { AppointmentList } from '../components/appointments/AppointmentList'
 import { ConfirmDialog } from '../components/ui/Modal'
 import { Button } from '../components/ui/Button'
+import { ImportModal } from '../components/import/ImportModal'
 
 type Tab = 'perfil' | 'vacunas' | 'historial' | 'medicamentos' | 'citas'
 
@@ -40,6 +41,7 @@ export default function DogProfilePage() {
   const [showEditDog, setShowEditDog] = useState(false)
   const [showDeleteDog, setShowDeleteDog] = useState(false)
   const [deletingDog, setDeletingDog] = useState(false)
+  const [showImport, setShowImport] = useState(false)
 
   async function fetchAll() {
     if (!id) return
@@ -120,6 +122,13 @@ export default function DogProfilePage() {
           </div>
           {isEditor && (
             <div className="flex gap-1 no-print pt-1">
+              <button
+                onClick={() => setShowImport(true)}
+                className="p-2 text-gray-500 hover:text-sage-600 hover:bg-white/60 rounded-xl transition"
+                title="Importar datos desde CSV"
+              >
+                📥
+              </button>
               <button
                 onClick={() => setShowEditDog(true)}
                 className="p-2 text-gray-500 hover:text-terra-500 hover:bg-white/60 rounded-xl transition"
@@ -212,6 +221,15 @@ export default function DogProfilePage() {
           onConfirm={handleDeleteDog}
           onCancel={() => setShowDeleteDog(false)}
           loading={deletingDog}
+        />
+      )}
+
+      {showImport && (
+        <ImportModal
+          dogId={dog.id}
+          dogName={dog.name}
+          onClose={() => setShowImport(false)}
+          onImported={() => { fetchAll() }}
         />
       )}
     </div>
